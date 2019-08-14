@@ -13,3 +13,6 @@ Works on some files, while not on others. I got better luck with textures from t
 
 Exporter:
 Currently does not work. As I said, we need to work out the way the format works before we can export files in said format.
+
+# Required python modules:
+OpenCV2
