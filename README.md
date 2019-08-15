@@ -16,3 +16,4 @@ Currently does not work. As I said, we need to work out the way the format works
 
 # Required python modules:
 OpenCV2
+Numpy
