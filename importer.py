@@ -20,7 +20,7 @@ import math
 a = filedialog.askopenfile(filetypes=[('all files', '.*'), ('AETEX files', '.aetex')]).name
 
 inpFile = open(a, "rb")
-fileSize = os.path.getsize(a)
+fileSize = os.path.getsize(a)									#fileStart + (imageX * imageY)
 print("File size: " + str(fileSize))
 inpFile.read(9)
 #fileStart = int.from_bytes(inpFile.read(1), "big")				#TODO: find out where the graphics data actually starts, pretty sure it's not always 74/4A
@@ -55,6 +55,8 @@ programCounterXMax = imageYInt
 programCounterY = 0
 programCounterYMax = imageXInt
 
+programCounter = 74
+
 print("MaxX Program counter: " + str(programCounterXMax))
 print("MaxY Program counter: " + str(programCounterYMax))
 
@@ -62,9 +64,13 @@ newImage = np.zeros((programCounterYMax, programCounterXMax, 4), np.uint8)
 
 while programCounterY != programCounterYMax:
 	r = int.from_bytes(inpFile.read(1), "big")
+	#r = 255																			#debug
 	g = int.from_bytes(inpFile.read(1), "big")
+	#g = 255																			#debug
 	b = int.from_bytes(inpFile.read(1), "big")
+	#b = 255																			#debug
 	a = int.from_bytes(inpFile.read(1), "big")
+	#a = 255																			#debug
 	#print("R: " + str(r) + " G: " + str(g) + " B: " + str(b))						#DEBUG: Only use if you need to, this slows down the program a lot
 	newImage[programCounterY, programCounterX] = [r, g, b, a]
 	#print("XPos: " + str(programCounterX) + " YPos: " + str(programCounterY))		#same here
@@ -72,7 +78,15 @@ while programCounterY != programCounterYMax:
 	if programCounterX == programCounterXMax:
 		programCounterX = 0
 		programCounterY += 1
-
+	programCounter += 4
+	if programCounter == fileStart + (imageXInt * imageYInt * 4):
+		print("Reached End of File at:")
+		print("X: " + str(programCounterX))
+		print("Y: " + str(programCounterY))
+		
+print("Read bytes: " + str(programCounter))
+print("Expected reads: " + str(fileSize))
+		
 cv2.imshow("output", newImage)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
