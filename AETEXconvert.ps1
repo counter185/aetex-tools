@@ -2,6 +2,8 @@
     [Parameter(Mandatory=$true)][string]$fileName
 )
 
+#deprecated! please use aetex_tool.py instead
+
 while ($fileName.StartsWith("`"")){
     $fileName = $fileName.Substring(1)
 }
